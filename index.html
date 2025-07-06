@@ -5,33 +5,128 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Welcome to My Coding Journey</title>
     <style>
+        /* Netflix Intro Animation Styles */
+        #intro-animation {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            overflow: hidden;
+        }
+
+        .intro-container {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .logo {
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 80%;
+            max-width: 800px;
+        }
+
+        .letter {
+            color: #e50914;
+            font-size: 20vw;
+            font-weight: 900;
+            text-transform: uppercase;
+            opacity: 0;
+            text-shadow: 0 0 10px rgba(229, 9, 20, 0.7);
+            animation: letter-appear 0.5s forwards, glow 2s infinite alternate;
+        }
+
+        .glow {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at center, #e50914 0%, transparent 70%);
+            opacity: 0;
+            animation: fade-glow 5s forwards;
+            z-index: -1;
+        }
+
+        @keyframes letter-appear {
+            to {
+                opacity: 1;
+            }
+        }
+
+        @keyframes glow {
+            from {
+                text-shadow: 0 0 10px rgba(229, 9, 20, 0.7);
+            }
+            to {
+                text-shadow: 0 0 20px rgba(229, 9, 20, 0.9), 0 0 30px rgba(229, 9, 20, 0.5);
+            }
+        }
+
+        @keyframes fade-glow {
+            0% {
+                opacity: 0;
+            }
+            50% {
+                opacity: 0.3;
+            }
+            100% {
+                opacity: 0.1;
+            }
+        }
+
+        /* Main Website Styles */
         body {
             font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
             background-color: #f4f4f9;
             color: #333;
+            opacity: 0;
+            animation: fade-in 1s forwards;
+            animation-delay: 5s;
         }
+
+        @keyframes fade-in {
+            to {
+                opacity: 1;
+            }
+        }
+
         header {
             text-align: center;
             padding: 50px;
             background-color: #007acc;
             color: #fff;
         }
+
         nav {
             text-align: center;
             padding: 15px;
             background-color: #f0f0f0;
         }
+
         nav a {
             margin: 0 15px;
             text-decoration: none;
             color: #007acc;
             font-weight: bold;
         }
+
         nav a:hover {
             color: #005999;
         }
+
         section {
             padding: 20px;
             margin: 20px auto;
@@ -40,25 +135,38 @@
             border-radius: 10px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
+
         footer {
             text-align: center;
             padding: 20px;
             background-color: #f0f0f0;
             margin-top: 20px;
         }
+
         h2 {
             color: #007acc;
         }
+
         ul {
             list-style-type: none;
             padding: 0;
         }
+
         ul li {
             margin: 10px 0;
         }
     </style>
 </head>
 <body>
+    <!-- Netflix-style Intro Animation -->
+    <div id="intro-animation">
+        <div class="intro-container">
+            <div class="glow"></div>
+            <div class="logo" id="logo"></div>
+        </div>
+    </div>
+
+    <!-- Main Website Content (hidden until intro finishes) -->
     <header>
         <h1>Welcome to My Coding Journey</h1>
         <p>Learning to code one step at a time</p>
@@ -112,5 +220,49 @@
     <footer>
         <p>&copy; 2025 Victor Otieno - My Coding Journey</p>
     </footer>
+
+    <script>
+        // Netflix Intro Animation
+        document.addEventListener('DOMContentLoaded', function() {
+            const word = "TRUMPERBEE";
+            const logo = document.getElementById('logo');
+            
+            // Create letters with staggered animation
+            for (let i = 0; i < word.length; i++) {
+                const letter = document.createElement('div');
+                letter.className = 'letter';
+                letter.textContent = word[i];
+                letter.style.animationDelay = `${i * 0.1}s`;
+                logo.appendChild(letter);
+            }
+            
+            // Responsive font size adjustment
+            function adjustFontSize() {
+                const letters = document.querySelectorAll('.letter');
+                const containerWidth = document.querySelector('.logo').offsetWidth;
+                const containerHeight = window.innerHeight;
+                
+                const widthBasedSize = containerWidth / (word.length * 0.8);
+                const heightBasedSize = containerHeight * 0.5;
+                const fontSize = Math.min(widthBasedSize, heightBasedSize);
+                
+                letters.forEach(letter => {
+                    letter.style.fontSize = `${fontSize}px`;
+                });
+            }
+            
+            adjustFontSize();
+            window.addEventListener('resize', adjustFontSize);
+            
+            // Remove intro animation after 5 seconds
+            setTimeout(function() {
+                const intro = document.getElementById('intro-animation');
+                intro.style.opacity = '0';
+                setTimeout(function() {
+                    intro.style.display = 'none';
+                }, 1000);
+            }, 5000);
+        });
+    </script>
 </body>
 </html>
